@@ -1,5 +1,6 @@
 package com.example.gosocio.entities
 
+import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
@@ -10,9 +11,9 @@ import androidx.room.Query
 interface ItemsDao {
 
     @Query("SELECT * FROM items_table")
-    fun getAllPosts(): PagingSource<Int, Items>
+    fun getAllPosts(): LiveData<List<Items>>
 
-    /*@Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(items: Items)*/
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(items: List<Items>)
 
 }

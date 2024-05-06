@@ -18,23 +18,19 @@ import com.example.gosocio.network.ApiClient
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        val viewModelFactory =ItemViewModelFactory(ItemRepository(AppDatabase.getDatabase(this) ,ApiClient.apiService))
-
+        val viewModelFactory =ItemViewModelFactory(ItemRepository(AppDatabase.getDatabase(this),ApiClient.apiService))
         val viewModel = ViewModelProvider(this, viewModelFactory).get(ItemViewModel::class.java)
 
-
+        viewModel.getRoomData()
         val recyclerview : RecyclerView = findViewById(R.id.recyclerview)
         recyclerview.layoutManager = LinearLayoutManager(this)
-        val adapter = RecyclerItemsAdapter()
-        recyclerview.adapter = adapter
-
+        var adapter :RecyclerItemsAdapter
         viewModel.items.observe(this, Observer { items ->
             Log.d("items", items.size.toString())
+             adapter = RecyclerItemsAdapter(items)
+            recyclerview.adapter = adapter
         })
-        viewModel.posts.observe(this) { pagingData ->
-            adapter.submitData(lifecycle, pagingData)
-        }
+
     }
 }

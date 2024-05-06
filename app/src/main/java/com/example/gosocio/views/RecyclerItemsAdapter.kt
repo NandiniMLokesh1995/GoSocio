@@ -12,25 +12,22 @@ import coil.load
 import com.example.gosocio.R
 import com.example.gosocio.entities.Items
 
-class RecyclerItemsAdapter() : PagingDataAdapter<Items, RecyclerView.ViewHolder>(POST_COMPARATOR) {
+class RecyclerItemsAdapter(val items: List<Items>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_1 =0
     private val TYPE_2 =1
 
     override fun getItemViewType(position: Int): Int {
 
-        return when(getItem(position)?.type){
+        return when(items[position].type){
             "text" -> TYPE_1
             "image" -> TYPE_2
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
-    companion object {
 
-        val POST_COMPARATOR = object : DiffUtil.ItemCallback<Items>() {
-            override fun areItemsTheSame(oldItem: Items, newItem: Items): Boolean = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: Items, newItem: Items): Boolean = oldItem == newItem
-        }
+    override fun getItemCount(): Int {
+        return items.size
     }
 
 
@@ -54,15 +51,15 @@ class RecyclerItemsAdapter() : PagingDataAdapter<Items, RecyclerView.ViewHolder>
         when(holder.itemViewType){
             TYPE_1 -> {
                 val typeOneViewHolder = holder as TypeOneViewHolder
-                val title = getItem(position)?.title
-                val name = getItem(position)?.name
+                val title = items[position].title
+                val name = items[position].name
                 typeOneViewHolder.bind(title,name)
             }
             TYPE_2 -> {
                 val typeTwoViewHolder = holder as TypeTwoViewHolder
-                val title = getItem(position)?.title
-                val name = getItem(position)?.name
-                val thumbnail = getItem(position)?.thumbnail
+                val title = items[position].title
+                val name = items[position].name
+                val thumbnail = items[position].thumbnail
                 typeTwoViewHolder.bind(title, name, thumbnail)
             }
         }
@@ -73,7 +70,7 @@ class RecyclerItemsAdapter() : PagingDataAdapter<Items, RecyclerView.ViewHolder>
         private val titleView: TextView = itemView.findViewById(R.id.txt_title)
         private val nameView: TextView = itemView.findViewById(R.id.txt_name)
 
-        fun bind(title: String?, name: String?) {
+        fun bind(title: String, name: String) {
             titleView.text = title
             nameView.text = name
         }
@@ -84,7 +81,7 @@ class RecyclerItemsAdapter() : PagingDataAdapter<Items, RecyclerView.ViewHolder>
         private val imgView: ImageView = itemView.findViewById(R.id.img_pic)
 
 
-        fun bind(title: String?, name: String?, thumbnail :String?) {
+        fun bind(title: String, name: String, thumbnail :String) {
             imgView.load(thumbnail)
             titleView.text = title
             nameView.text = name

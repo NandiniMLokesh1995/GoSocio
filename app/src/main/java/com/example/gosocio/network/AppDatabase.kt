@@ -5,12 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.gosocio.entities.Converter
 import com.example.gosocio.entities.ItemsDao
 import com.example.gosocio.entities.Items
 
 @Database(entities = [Items::class], version = 1, exportSchema = false)
-@TypeConverters(Converter::class)
 abstract class AppDatabase(): RoomDatabase() {
 
     abstract fun itemDao(): ItemsDao

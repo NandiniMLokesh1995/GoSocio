@@ -53,8 +53,8 @@ dependencies {
     annotationProcessor(libs.roomCompiler)
     implementation(libs.room)
     implementation(libs.roomRuntime)
-    kapt("androidx.room:room-compiler:2.4.2")
-    implementation("androidx.room:room-paging:2.4.2")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-paging:2.6.1")
     //implementation(libs.serialization)
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
