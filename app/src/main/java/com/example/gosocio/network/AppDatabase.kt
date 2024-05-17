@@ -6,12 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.gosocio.entities.Converter
-import com.example.gosocio.entities.ItemsDao
 import com.example.gosocio.entities.Items
+import com.example.gosocio.entities.ItemsDao
 
 @Database(entities = [Items::class], version = 1, exportSchema = false)
 @TypeConverters(Converter::class)
-abstract class AppDatabase(): RoomDatabase() {
+abstract class AppDatabase() : RoomDatabase() {
 
     abstract fun itemDao(): ItemsDao
 
@@ -22,8 +22,6 @@ abstract class AppDatabase(): RoomDatabase() {
         private var INSTANCE: AppDatabase? = null
 
         fun getDatabase(context: Context): AppDatabase {
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

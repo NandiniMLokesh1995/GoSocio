@@ -53,16 +53,14 @@ dependencies {
     annotationProcessor(libs.roomCompiler)
     implementation(libs.room)
     implementation(libs.roomRuntime)
-    kapt("androidx.room:room-compiler:2.4.2")
-    implementation("androidx.room:room-paging:2.4.2")
-    //implementation(libs.serialization)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation(libs.room.paging)
+    kapt(libs.room.kapt)
+    implementation(libs.serialization)
+    // Lifecycle components
+    implementation(libs.androidx.lifecycle)
+    implementation(libs.androidx.lifecycle.viewmodel)
 
     testImplementation(libs.junit)
-    // Lifecycle components
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0")
-
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 

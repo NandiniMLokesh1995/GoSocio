@@ -5,8 +5,6 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
-import com.example.gosocio.entities.ItemsDao
 import com.example.gosocio.entities.Items
 import com.example.gosocio.network.ApiService
 import com.example.gosocio.network.AppDatabase
@@ -17,37 +15,33 @@ class ItemRemoteMediator(
     private val service: ApiService
 ) : RemoteMediator<Int, Items>() {
 
-    private val itemsDao: ItemsDao= appDatabase.itemDao()
-    override suspend fun load(loadType: LoadType, state: PagingState<Int, Items>): MediatorResult {
-        try {
-            itemsDao.getAllPosts()
-            val initial_response = service.getData("")
+    private var nextKey: String? = null
 
-            val pageKey = when (loadType) {
+    override suspend fun load(
+        loadType: LoadType,
+        state: PagingState<Int, Items>
+    ): MediatorResult {
+
+        Log.d("ItemRemoteMediator", "LoadType: $loadType, nextKey: $nextKey")
+        return try {
+            val nextPage = when (loadType) {
                 LoadType.REFRESH -> ""
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
-                LoadType.APPEND -> {
-                     val lastItem = initial_response.next ?: return MediatorResult.Success(endOfPaginationReached = true)
-                    lastItem
-                }
-            }
-//state.lastItemOrNull() ?: return MediatorResult.Success(endOfPaginationReached = true)
-            //lastItem.id = initial_response.next
-
-            val response = service.getData(pageKey)
-
-            appDatabase.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                   // appDatabase.postDao().clearAll()
-                }
-                val items =response.data.listIterator().next()
-                Log.d("items", items.id)
-                //itemsDao.insertAll(items)
+                LoadType.APPEND -> nextKey
             }
 
-            return MediatorResult.Success(endOfPaginationReached = response.next.isNullOrEmpty())
-        } catch (exception: Exception) {
-            return MediatorResult.Error(exception)
+            val response = service.getData(nextPage)
+            val data = response.data
+
+            if (loadType == LoadType.REFRESH) {
+                appDatabase.itemDao().clearAll()
+            }
+            appDatabase.itemDao().insertAll(data)
+            nextKey = response.next
+
+            MediatorResult.Success(endOfPaginationReached = response.next.isNullOrEmpty())
+        } catch (e: Exception) {
+            MediatorResult.Error(e)
         }
     }
 }

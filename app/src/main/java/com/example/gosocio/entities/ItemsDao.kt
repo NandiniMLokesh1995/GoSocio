@@ -12,7 +12,9 @@ interface ItemsDao {
     @Query("SELECT * FROM items_table")
     fun getAllPosts(): PagingSource<Int, Items>
 
-    /*@Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(items: Items)*/
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(items: List<Items>)
+    @Query("DELETE FROM items_table")
+    suspend fun clearAll()
 
 }

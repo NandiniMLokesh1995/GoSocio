@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiResponse(
     @SerializedName("success")
-    val success :Boolean,
+    val success: Boolean,
     @SerializedName("data")
-    val data : List<Items>,
+    val data: List<Items>,
     @SerializedName("next")
-    val next : String
+    val next: String
 )

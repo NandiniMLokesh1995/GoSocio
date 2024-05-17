@@ -21,7 +21,4 @@ class ItemRepository(private val appDatabase: AppDatabase, private val apiServic
         ).flow
     }
 
-    suspend fun getAllPosts(): ApiResponse {
-        return apiService.getData("")
-    }
 }

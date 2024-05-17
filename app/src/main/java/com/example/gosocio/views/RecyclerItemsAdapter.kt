@@ -9,6 +9,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.request.CachePolicy
+import coil.transform.CircleCropTransformation
 import com.example.gosocio.R
 import com.example.gosocio.entities.Items
 
@@ -85,7 +87,14 @@ class RecyclerItemsAdapter() : PagingDataAdapter<Items, RecyclerView.ViewHolder>
 
 
         fun bind(title: String?, name: String?, thumbnail :String?) {
-            imgView.load(thumbnail)
+
+            imgView.load(thumbnail){
+                crossfade(true)
+                diskCachePolicy(CachePolicy.ENABLED) // Cache the image on disk
+                memoryCachePolicy(CachePolicy.ENABLED) // Cache the image in memory
+                placeholder(R.drawable.ic_action_name)
+                transformations(CircleCropTransformation())
+            }
             titleView.text = title
             nameView.text = name
         }
