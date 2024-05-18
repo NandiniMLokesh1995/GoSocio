@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-kapt")
     kotlin("plugin.serialization") version "1.9.23"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -63,5 +64,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
+    implementation( libs.androidx.activity.ktx)
+}
+kapt {
+    correctErrorTypes = true
 }
